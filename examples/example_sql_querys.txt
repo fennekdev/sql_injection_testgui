@@ -1,4 +1,4 @@
-coustome Querys need "username" and/or "password" like in the Example 1:
+Coustome Querys need "username" and/or "password" like in the Example 1:
 
 
 Example 1:
