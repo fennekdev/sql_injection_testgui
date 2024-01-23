@@ -1,1 +1,11 @@
+coustome Querys need "username" and/or "password" like in the Example 1:
 
+
+Example 1:
+
+SELECT password
+FROM users
+WHERE username = "username" and password = "password"
+
+return:
+will be True if password is True and False if password is Flase
