@@ -15,6 +15,8 @@ class App(ctk.CTk):
 		super().__init__()
 
 		self.db_name = "standart_db.db"
+		self.current_table="users" # pls use that as standart
+		dbm.standart_db_init("standart_db.db")
         
 		self.geometry("900x700")
 
@@ -52,8 +54,8 @@ class App(ctk.CTk):
 		reset_loginframe_but = ctk.CTkButton(master = self.mainframe,text="Reset all",command=self.reset_all,font=("Arial",20))
 		reset_loginframe_but.grid(row = 0 ,pady = 10,sticky = "E",padx=10)
 
-		table_view_but = ctk.CTkButton(master = self.mainframe, text="Show Tabels", font=("Arial",20),command=self.show_table)
-		table_view_but.grid(row=0,column=3,padx=10)
+		self.table_view_but = ctk.CTkButton(master = self.mainframe, text="Show Tabels", font=("Arial",20),command=self.show_table)
+		self.table_view_but.grid(row=0,column=3,padx=10)
 
 		change_query_but=ctk.CTkButton(master=self.mainframe,text="Change Query", command=self.change_query,font=("Arial",20))
 		change_query_but.grid(row=0,column=1,columnspan=2)
@@ -61,8 +63,23 @@ class App(ctk.CTk):
 		self.mainframe.update()
 
 	def show_table(self):
-		pass
+		def on_close():
+			print("destoyed")# test
+			table_view.destroy()
+			self.table_view_but.configure(state="normal")
 
+		table_view = ctk.CTkToplevel(master=self)
+		table_view.geometry("400x600")
+		table_view.title("Table content")
+
+		self.table_view_but.configure(state="disabled")
+		
+		table_view.protocol("WM_DELETE_WINDOW", on_close)
+
+		database_label=ctk.CTkLabel(master = table_view,
+							  text=dbm.print_db_formated(self.db_name,self.current_table),
+							  font=("Arial",17))
+		database_label.pack()
 
 	def change_query(self):
 		pass
@@ -94,9 +111,10 @@ class App(ctk.CTk):
 		return count
 	
 	def update_query(self):
+		self.textbox.configure(state="normal")
+
 		query = self.user_pass.get()
-		print(query)
-		if query ==" ":
+		if len(query) <1:
 			pass
 			# aktion on empty entry
 			self.exec_text.set("Executet Query:\nSELECT password\nFROM users\nWHERE username = input_username")
@@ -142,6 +160,8 @@ class App(ctk.CTk):
 
 		self.exec_query.update()
 		self.textbox.update()
+		self.textbox.configure(state="disabled")
+
 
 	def query_frame_init(self):
 		self.query_frame = ctk.CTkFrame(master=self.mainframe,width=300)
@@ -153,7 +173,7 @@ class App(ctk.CTk):
 		querey_pre = "SELECT password\nFROM users\nWHERE username = \"here username\""
 
 		self.textbox = ctk.CTkTextbox(self.query_frame,fg_color="transparent",font=("Arial",17),border_width=2,wrap="word",width=300,height=150)
-		
+		self.textbox.configure(state="normal")
 		self.textbox.insert("1.0", querey_pre)
 
 		self.textbox.tag_add("blau",1.0,1.6)
@@ -164,6 +184,8 @@ class App(ctk.CTk):
 		self.textbox.tag_config("rot", foreground="indian red")
 		self.textbox.tag_config("outmark",background="light grey",foreground ="black")
 		self.textbox.tag_config("green",foreground="green")
+
+		self.textbox.configure(state="disabled")
 
 		self.textbox.grid(row=1,sticky = "nswe",padx=5)
 		
