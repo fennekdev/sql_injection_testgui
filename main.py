@@ -7,7 +7,7 @@ import tkinter as tk
 import customtkinter as ctk
 import tkinter.messagebox as tkmb
 import sqlite3
-from db_managment import check_user_credentials , register_user
+import db_management as dbm
 
 class App(ctk.CTk):
 	def __init__(self):
