@@ -7,13 +7,15 @@ import tkinter as tk
 import customtkinter as ctk
 import tkinter.messagebox as tkmb
 import sqlite3
+import os
 import db_management as dbm
-#testtesttest
 
 class App(ctk.CTk):
 	def __init__(self):
 		super().__init__()
-		
+
+		self.db_name = "standart_db.db"
+        
 		self.geometry("900x700")
 
 		ctk.set_appearance_mode("dark")
