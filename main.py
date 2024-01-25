@@ -10,7 +10,7 @@ import sqlite3
 import os
 import db_management as dbm
 
-class App(ctk.CTk):
+class App(ctk.CTk,dbm.Query):
 	def __init__(self):
 		super().__init__()
 
