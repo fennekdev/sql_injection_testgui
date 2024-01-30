@@ -7,8 +7,8 @@ A simple "Sqlinjektion" test gui based on local sqlite3 database with simple tab
 ---
 ### Main Window
 
-![Main look](https://github.com/fennekdev/sql_injection_testgui/blob/main/screenshots/screenshot_1.PNG)
+<img src="https://github.com/fennekdev/sql_injection_testgui/blob/main/screenshots/screenshot_1.PNG" alt="Main look" width="200"/>
 
 ### Detection of input
 
-![Main look](https://github.com/fennekdev/sql_injection_testgui/blob/main/screenshots/screenshot_2.PNG)
+<img src="https://github.com/fennekdev/sql_injection_testgui/blob/main/screenshots/screenshot_2.PNG" alt="Detection drawing" width="200"/>
