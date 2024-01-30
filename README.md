@@ -5,6 +5,7 @@ A simple "Sqlinjektion" test gui based on local sqlite3 database with simple tab
 ## ❗ This code is still in production so it may not work as intended!
 
 ---
+### Preview
 ### Main Window
 
 <img src="https://github.com/fennekdev/sql_injection_testgui/blob/main/screenshots/screenshot_1.PNG" alt="Main look" width="700"/>
