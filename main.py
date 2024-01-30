@@ -62,7 +62,7 @@ class App(ctk.CTk,dbm.Query):
 
 		self.mainframe.update()
 
-	def show_table(self):
+	def show_table(self): # maby use CTkTable for table View
 		def on_close():
 			print("destoyed")# test
 			table_view.destroy()
