@@ -157,25 +157,22 @@ class App(ctk.CTk,dbm.Query):
 		if user.find("\"") > -1:
 			self.user_qouted = True
 
-			n = self.count_chars_until_index(updated_query,updated_query.find("\""))
+			n = self.count_chars_until_index(updated_query,updated_query.find("\"")) # maby here begin on begin_user
 			N = self.count_chars_until_index(user,user.find("\""))
 			
-			self.textbox.tag_add("rot",f"1.0 + {n+N+1} chars",f"end -{psw.len()+15} chars") # end should be last char of user
+			self.textbox.tag_add("rot",f"1.0 + {n+N+1} chars",f"end -{len(psw)+20} chars") # end should be last char of user
 
 		else:
-			self.quot_index = None
 			self.user_qouted = False	
 
-		if psw.find("\"") > -1: # here if user qouted = true skip all coutes in user with user.count("\"") and psw.find("\",user.count("\""))
+		if psw.find("\"") > -1:
 			self.psw_qouted = True
 
-			n = self.count_chars_until_index(updated_query,updated_query.find("\""))
-			N = self.count_chars_until_index(psw,psw.find("\""))
+			n = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_psw))
 			
-			self.textbox.tag_add("rot",f"1.0 + {n+N+1} chars","end -2 chars")
+			self.textbox.tag_add("rot",f"1.0 + {n} chars","end -2 chars")
 
 		else:
-			self.quot_index = None
 			self.psw_qouted = False
 
 		# outcommend detection
