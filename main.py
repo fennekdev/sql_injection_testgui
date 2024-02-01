@@ -32,8 +32,6 @@ class App(ctk.CTk,dbm.Query):
 
 		self.query_lvl=1
 		self.query_dict ={}
-		self.quot_in_query=False
-		self.count_to_quot=0
 		self.exec_text=ctk.StringVar()
 		self.exec_text.set("Executet Query:\nSELECT password\nFROM users\nWHERE username = input_username and password = input_password")
 		self.exec_query_prefix="Executet Query:\n"
@@ -133,7 +131,7 @@ class App(ctk.CTk,dbm.Query):
 		self.textbox.tag_add("blau",2.0,2.4)
 		self.textbox.tag_add("blau",3.0,3.6)
 
-
+		# green taging
 		begin_user = self.count_chars_until_index(updated_query,updated_query.find("\""))+1
 		end_user = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_user))
 		self.textbox.tag_add("green",
@@ -144,7 +142,7 @@ class App(ctk.CTk,dbm.Query):
 			   "user end: ",end_user)
 		
 				
-		begin_psw = self.count_chars_until_index(updated_query,updated_query.find("\"",end_user+1))+1
+		begin_psw = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_user+len(user)+1))+1
 		end_psw = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_psw+1))
 		if len(psw):
 			self.textbox.tag_add("green",
@@ -154,10 +152,22 @@ class App(ctk.CTk,dbm.Query):
 		print("PSW begin: ",begin_psw,
 			   "psw end: ",end_psw)
 		
+		# quot detection
+		
+		if user.find("\"") > -1:
+			self.user_qouted = True
+
+			n = self.count_chars_until_index(updated_query,updated_query.find("\""))
+			N = self.count_chars_until_index(user,user.find("\""))
+			
+			self.textbox.tag_add("rot",f"1.0 + {n+N+1} chars",f"end -{psw.len()+15} chars") # end should be last char of user
+
+		else:
+			self.quot_index = None
+			self.user_qouted = False	
 
 		if psw.find("\"") > -1: # here if user qouted = true skip all coutes in user with user.count("\"") and psw.find("\",user.count("\""))
 			self.psw_qouted = True
-			self.count_to_quot+=1
 
 			n = self.count_chars_until_index(updated_query,updated_query.find("\""))
 			N = self.count_chars_until_index(psw,psw.find("\""))
@@ -168,20 +178,7 @@ class App(ctk.CTk,dbm.Query):
 			self.quot_index = None
 			self.psw_qouted = False
 
-		if user.find("\"") > -1:
-			self.user_qouted = True
-			self.count_to_quot+=1
-
-			n = self.count_chars_until_index(updated_query,updated_query.find("\""))
-			N = self.count_chars_until_index(user,user.find("\""))
-			
-			self.textbox.tag_add("rot",f"1.0 + {n+N+1} chars",f"end -{psw.len()+15} chars") # end should be last char of user
-
-		else:
-			self.quot_index = None
-			self.psw_qouted = False
-		
-
+		# outcommend detection
 		if psw.find("--") != -1 and self.psw_qouted == True:
 			n = self.count_chars_until_index(updated_query,updated_query.find("--"))
 			self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
@@ -198,6 +195,7 @@ class App(ctk.CTk,dbm.Query):
 
 		else:
 			self.exec_text.set(self.exec_query_prefix+updated_query)
+
 
 		self.exec_query.update()
 		self.textbox.update()
