@@ -83,6 +83,7 @@ class App(ctk.CTk,dbm.Query):
 		database_label.pack()
 
 	def change_query(self):
+		# here need to detect query
 		pass
 
 	def reset_all(self):
@@ -114,7 +115,9 @@ class App(ctk.CTk,dbm.Query):
 	def update_query(self):
 		self.textbox.configure(state="normal")
 
-		query = self.user_pass.get()
+		#query = self.user_pass.get()
+		query = self.user_entry.get()
+
 		if len(query) <1:
 			pass
 			# action on empty entry
@@ -204,14 +207,16 @@ class App(ctk.CTk,dbm.Query):
 		label = ctk.CTkLabel(master=self.logframe,text='Enter Username and Password',font=("Arial",20))
 		label.grid(row = 0,pady = 30,padx = 10)
 
-		user_entry= ctk.CTkEntry(master=self.logframe,placeholder_text="Username",font=("Arial",20),width=200)
-		user_entry.grid(row = 1,pady = 15)
+		self.user_entry= ctk.CTkEntry(master=self.logframe,placeholder_text="Username",font=("Arial",20),width=200)
+		self.user_entry.grid(row = 1,pady = 15)
+		self.user_entry.bind("<KeyRelease>", lambda event: self.update_query())
 
 		self.user_pass= ctk.CTkEntry(master=self.logframe,placeholder_text="Password",font=("Arial",20),width=200)
-		self.user_pass.bind("<KeyRelease>", lambda event: self.update_query())
+		#self.user_pass.bind("<KeyRelease>", lambda event: self.update_query())
+		# later for ohter usage
 		self.user_pass.grid(row = 2,pady = 20)
 
-		button = ctk.CTkButton(master=self.logframe,text='Login',command=lambda: self.login(user_entry,self.user_pass),font=("Arial",25))
+		button = ctk.CTkButton(master=self.logframe,text='Login',command=lambda: self.login(self.user_entry,self.user_pass),font=("Arial",25))
 		button.grid(row = 3,pady = 20)
 
 
