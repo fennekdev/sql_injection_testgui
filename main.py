@@ -137,9 +137,6 @@ class App(ctk.CTk,dbm.Query):
 		self.textbox.tag_add("green",
 					   f"1.0 + {begin_user} chars",
 					   f"1.0 +{end_user} chars")
-
-		print("user begin: ",begin_user,
-			   "user end: ",end_user)
 		
 				
 		begin_psw = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_user+len(user)+1))+1
@@ -149,9 +146,6 @@ class App(ctk.CTk,dbm.Query):
 						f"1.0 + {begin_psw} chars",
 						f"1.0 +{end_psw} chars")
 
-		print("PSW begin: ",begin_psw,
-			   "psw end: ",end_psw)
-		
 		# quot detection
 		
 		if user.find("\"") > -1:
@@ -176,22 +170,36 @@ class App(ctk.CTk,dbm.Query):
 			self.psw_qouted = False
 
 		# outcommend detection
-		if psw.find("--") != -1 and self.psw_qouted == True:
-			n = self.count_chars_until_index(updated_query,updated_query.find("--"))
-			self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
-			self.exec_text.set(self.exec_query_prefix+updated_query[:-3])
+		if updated_query.find("--") != -1:
+			skip = 0
+			if user.find("--") !=-1:
+				print("into user.find")
+				if self.user_qouted == False:
+					skip = updated_query.find("--")+1
 
-		else:
-			self.exec_text.set(self.exec_query_prefix+updated_query)
+				elif self.user_qouted == True:
+					n = self.count_chars_until_index(updated_query,updated_query.find("--"))
+					self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
 
+			if psw.find("--") !=-1:
+				print("into psw.find")
+				if self.psw_qouted == False:
+					print("1")
+					pass
 
-		if user.find("--") != -1 and self.user_qouted == True:
-			n = self.count_chars_until_index(updated_query,updated_query.find("--"))
-			self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
-			self.exec_text.set(self.exec_query_prefix+updated_query[:-3])
+				elif self.psw_qouted == True:
+					if skip == 0:
+						print("2")
+						n = self.count_chars_until_index(updated_query,updated_query.find("--"))
+						self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
 
-		else:
-			self.exec_text.set(self.exec_query_prefix+updated_query)
+					elif skip != 0:
+						print("3")
+						n = self.count_chars_until_index(updated_query,updated_query.find("--",skip))
+						self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
+
+			else:
+				print("shit")
 
 
 		self.exec_query.update()
