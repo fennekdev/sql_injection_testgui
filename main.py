@@ -49,7 +49,7 @@ class App(ctk.CTk,dbm.Query):
 		self.table_frame_init()
 
 		titel = ctk.CTkLabel(master = self.mainframe,textvariable=self.pagetitel,font=("Arial",15))
-		titel.grid(row= 0,pady=10,sticky="W",padx = 20)
+		titel.grid(row= 0,pady=10,sticky="W",padx = 10)
 
 		reset_loginframe_but = ctk.CTkButton(master = self.mainframe,text="Reset all",command=self.reset_all,font=("Arial",20))
 		reset_loginframe_but.grid(row = 0 ,pady = 10,sticky = "E",padx=10)
@@ -116,7 +116,7 @@ class App(ctk.CTk,dbm.Query):
 		query = self.user_pass.get()
 		if len(query) <1:
 			pass
-			# aktion on empty entry
+			# action on empty entry
 			self.exec_text.set("Executet Query:\nSELECT password\nFROM users\nWHERE username = input_username")
 
 		updated_query = f"SELECT password\nFROM users\nWHERE username = \"{query}\""
@@ -168,7 +168,7 @@ class App(ctk.CTk,dbm.Query):
 		self.query_frame.grid(row =1,column=1,padx = 10,pady =10,sticky="wens")
 
 		label = ctk.CTkLabel(master=self.query_frame,text='SQL Query',font=("Arial",20))
-		label.grid(row = 0,sticky = "nw",pady=10)
+		label.grid(row = 0,sticky = "nw",pady=10,padx=5)
 
 		querey_pre = "SELECT password\nFROM users\nWHERE username = \"here username\""
 
