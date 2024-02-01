@@ -139,11 +139,11 @@ class App(ctk.CTk,dbm.Query):
 					   f"1.0 +{end_user} chars")
 		
 				
-		begin_psw = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_user+len(user)+1))+1
+		begin_psw = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_user+len(user)+1))
 		end_psw = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_psw+1))
 		if len(psw):
 			self.textbox.tag_add("green",
-						f"1.0 + {begin_psw} chars",
+						f"1.0 + {begin_psw+1} chars",
 						f"1.0 +{end_psw} chars")
 
 		# quot detection
@@ -163,8 +163,11 @@ class App(ctk.CTk,dbm.Query):
 			self.psw_qouted = True
 
 			n = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_psw))
+			print(n)
+			print(begin_psw)
+			print(len(updated_query))
 			
-			self.textbox.tag_add("rot",f"1.0 + {n} chars","end -2 chars")
+			self.textbox.tag_add("rot",f"1.0 + {n+1} chars","end -2 chars")
 
 		else:
 			self.psw_qouted = False
@@ -201,6 +204,7 @@ class App(ctk.CTk,dbm.Query):
 			else:
 				print("shit")
 
+		print(self.psw_qouted)
 
 		self.exec_query.update()
 		self.textbox.update()
