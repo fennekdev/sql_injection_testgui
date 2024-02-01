@@ -70,6 +70,7 @@ class App(ctk.CTk,dbm.Query):
 
 		table_view = ctk.CTkToplevel(master=self)
 		table_view.geometry("400x600")
+		table_view.wm_attributes("-topmost",True)
 		table_view.title("Table content")
 
 		self.table_view_but.configure(state="disabled")
