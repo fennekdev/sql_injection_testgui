@@ -181,8 +181,12 @@ class App(ctk.CTk,dbm.Query):
 					skip = updated_query.find("--")+1
 
 				elif self.user_qouted == True:
-					n = self.count_chars_until_index(updated_query,updated_query.find("--"))
-					self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
+					# check index from quot
+					if user.find("--")>user.find("\""):
+						n = self.count_chars_until_index(updated_query,updated_query.find("--"))
+						self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
+					else:
+						pass
 
 			if psw.find("--") !=-1:
 				print("into psw.find")
@@ -192,14 +196,16 @@ class App(ctk.CTk,dbm.Query):
 
 				elif self.psw_qouted == True:
 					if skip == 0:
-						print("2")
-						n = self.count_chars_until_index(updated_query,updated_query.find("--"))
-						self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
+						if psw.find("--")>psw.find("\""):
+							print("2")
+							n = self.count_chars_until_index(updated_query,updated_query.find("--"))
+							self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
 
 					elif skip != 0:
-						print("3")
-						n = self.count_chars_until_index(updated_query,updated_query.find("--",skip))
-						self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
+						if psw.find("--")>psw.find("\""):
+							print("3")
+							n = self.count_chars_until_index(updated_query,updated_query.find("--",skip))
+							self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
 
 			else:
 				print("shit")
