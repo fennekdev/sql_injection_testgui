@@ -173,7 +173,7 @@ class App(ctk.CTk,dbm.Query):
 			self.psw_qouted = False
 
 		# outcommend detection
-		if updated_query.find("--") != -1:
+		if updated_query.find("--") != -1: # here problem: if -- is bevor " it will be detectet
 			skip = 0
 			if user.find("--") !=-1:
 				print("into user.find")
