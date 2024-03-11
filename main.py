@@ -32,11 +32,14 @@ class App(ctk.CTk,dbm.Query):
 
 		self.query_lvl=1
 		self.query_dict ={}
+
 		self.exec_text=ctk.StringVar()
 		self.exec_text.set("Executet Query:\nSELECT password\nFROM users\nWHERE username = input_username and password = input_password")
 		self.exec_query_prefix="Executet Query:\n"
+		
 		self.user_qouted = False
 		self.psw_qouted = False
+		
 		self.frame_init()
 
 	def frame_init(self):
@@ -265,10 +268,14 @@ class App(ctk.CTk,dbm.Query):
 		pass
 		
 		username=user.get()
-		username=str(username)
+		#username=str(username)
 
 		password=passw.get()
-		password=str(password)
+		#password=str(password)
+
+		return_value=dbm.exec_query()
+		print("return Value")
+
 
 		# basic login should return True
 		# should be able to login as admin with injection
