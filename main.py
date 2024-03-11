@@ -64,7 +64,6 @@ class App(ctk.CTk,dbm.Query):
 
 	def show_table(self): # maby use CTkTable for table View
 		def on_close():
-			print("destoyed")# test
 			table_view.destroy()
 			self.table_view_but.configure(state="normal")
 
@@ -161,24 +160,18 @@ class App(ctk.CTk,dbm.Query):
 
 		if psw.find("\"") > -1:
 			self.psw_qouted = True
-
 			n = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_psw))
-			print(n)
-			print(begin_psw)
-			print(len(updated_query))
-			
 			self.textbox.tag_add("rot",f"1.0 + {n+1} chars","end -2 chars")
 
 		else:
 			self.psw_qouted = False
 
 		# outcommend detection
-		if updated_query.find("--") != -1: # here problem: if -- is bevor " it will be detectet
-			skip = 0
+		skip = 0
+		if updated_query.find("--") != -1:
 			if user.find("--") !=-1:
-				print("into user.find")
 				if self.user_qouted == False:
-					skip = updated_query.find("--")+1
+					skip = updated_query.find("--")+2
 
 				elif self.user_qouted == True:
 					# check index from quot
@@ -186,31 +179,28 @@ class App(ctk.CTk,dbm.Query):
 						n = self.count_chars_until_index(updated_query,updated_query.find("--"))
 						self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
 					else:
-						pass
+						# skip index
+						skip = updated_query.find("--")+2
+			else:
+				pass
 
 			if psw.find("--") !=-1:
-				print("into psw.find")
 				if self.psw_qouted == False:
-					print("1")
 					pass
 
 				elif self.psw_qouted == True:
 					if skip == 0:
 						if psw.find("--")>psw.find("\""):
-							print("2")
 							n = self.count_chars_until_index(updated_query,updated_query.find("--"))
 							self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
 
 					elif skip != 0:
 						if psw.find("--")>psw.find("\""):
-							print("3")
-							n = self.count_chars_until_index(updated_query,updated_query.find("--",skip))
+							n = self.count_chars_until_index(updated_query,updated_query.find("--",skip+1))
 							self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
 
 			else:
-				print("shit")
-
-		print(self.psw_qouted)
+				pass
 
 		self.exec_query.update()
 		self.textbox.update()
