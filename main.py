@@ -18,7 +18,7 @@ class App(ctk.CTk,dbm.Query):
 		self.current_table="users" # pls use that as standart
 		dbm.standart_db_init("standart_db.db")
         
-		self.geometry("1100x700")
+		self.geometry("1300x700")
 
 		ctk.set_appearance_mode("dark")
 		ctk.set_default_color_theme("dark-blue")
@@ -49,7 +49,7 @@ class App(ctk.CTk,dbm.Query):
 		self.login_frame_init()
 		self.output_frame_init()
 		self.query_frame_init()
-		self.table_frame_init()
+		self.legende_frame_init()
 
 		titel = ctk.CTkLabel(master = self.mainframe,textvariable=self.pagetitel,font=("Arial",15))
 		titel.grid(row= 0,pady=10,sticky="W",padx = 10)
@@ -91,9 +91,6 @@ class App(ctk.CTk,dbm.Query):
 	def reset_all(self):
 		self.mainframe.destroy()
 		self.frame_init()
-
-	def clear_output(self):
-		self.output_textbox.delete("1.0","end")
 
 	def output_frame_init(self):
 		def clear_output():
@@ -245,9 +242,15 @@ class App(ctk.CTk,dbm.Query):
 		self.exec_query = ctk.CTkLabel(master = self.query_frame,textvariable=self.exec_text,justify="left",font=("Arial",15))
 		self.exec_query.grid(row=2,pady = 10,sticky = "w",padx=5)
 
-	def table_frame_init(self):  # sql operator legende
-		self.table_frame = ctk.CTkFrame(master=self.mainframe)
-		self.table_frame.grid(row =1,column=3,padx = 10,pady =10,sticky ="NSE",rowspan = 2)
+	def legende_frame_init(self):  # sql operator legende
+		self.legende_frame = ctk.CTkFrame(master=self.mainframe)
+		self.legende_frame.grid(row =1,column=3,padx = 10,pady =10,sticky ="NSE",rowspan = 2)
+
+		query_legend_title=ctk.CTkLabel(master=self.legende_frame,text="query cheat-sheet",font=("Arial",15))
+		query_legend_title.grid(row = 0)
+
+		query_cheat_sheat = ctk.CTkLabel(master=query_legend_title,font=("Arial",15),text="--\nmakes the code ignore the query comming after it\n\n \"\nwhen used you are allowed to inject query code after\n\n")
+		query_cheat_sheat.grid(row = 1,padx = 5)
 
 	def login_frame_init(self):
 		self.logframe = ctk.CTkFrame(master=self.mainframe)
@@ -284,7 +287,7 @@ class App(ctk.CTk,dbm.Query):
 		self.output_textbox.insert("1.0",return_value)
 
 		if return_value =="True\n":
-			CTkMessagebox(message="Login succesfully",icon="check", option_1="continue")
+			CTkMessagebox(message=f"Login succesfully as {username}",icon="check", option_1="continue")
 
 		elif return_value =="False\n":
 			CTkMessagebox(message="Login not succesfully",icon="cancel", option_1="shit")
