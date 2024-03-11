@@ -5,7 +5,7 @@ github: https://github.com/fennekdev/sql_injection_testgui
 """
 import tkinter as tk
 import customtkinter as ctk
-import tkinter.messagebox as tkmb
+from CTkMessagebox import CTkMessagebox
 import sqlite3
 import os
 import db_management as dbm
@@ -96,14 +96,20 @@ class App(ctk.CTk,dbm.Query):
 		self.output_textbox.delete("1.0","end")
 
 	def output_frame_init(self):
+		def clear_output():
+			self.output_textbox.delete("1.0","end")
+
 		self.output_frame = ctk.CTkFrame(master=self.mainframe)
 		self.output_frame.grid(row =2,column=0,padx = 10,pady =10,sticky ="nesw",columnspan=2)
 
 		titel = ctk.CTkLabel(master = self.output_frame,text="Output: ",font=("Arial",15))
 		titel.grid(sticky = "W",pady=5,padx=20)
 
-		self.output_textbox=ctk.CTkTextbox(master = self.output_frame,fg_color="transparent",font=("Arial",12),border_width=2,wrap="word",text_color=("gray10", "#DCE4EE"),width=600)
+		self.output_textbox=ctk.CTkTextbox(master = self.output_frame,fg_color="transparent",font=("Arial",20),border_width=2,wrap="word",text_color=("gray10", "#DCE4EE"),width=600)
 		self.output_textbox.grid(row=1,column=0,pady=10,padx=20)
+
+		clear_button = ctk.CTkButton(master=self.output_frame,text="Clear Output",command=clear_output)
+		clear_button.grid(row=1,column=1)
 		
 	def count_chars_until_index(self,string,index):
 		count = 0
@@ -273,14 +279,16 @@ class App(ctk.CTk,dbm.Query):
 		password=passw.get()
 		#password=str(password)
 
-		return_value=dbm.exec_query()
-		print("return Value")
+		return_value=dbm.exec_query(self.db_name,self.current_table,username,password)
 
+		self.output_textbox.insert("1.0",return_value)
 
-		# basic login should return True
-		# should be able to login as admin with injection
-		# show to clear out psw databasre
-		
+		if return_value =="True\n":
+			CTkMessagebox(message="Login succesfully",icon="check", option_1="continue")
+
+		elif return_value =="False\n":
+			CTkMessagebox(message="Login not succesfully",icon="cancel", option_1="shit")
+
 
 if __name__ == "__main__":
 	

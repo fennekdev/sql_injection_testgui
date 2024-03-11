@@ -38,18 +38,28 @@ def exec_query(db_name,table_name,username,password):
         # Connect to the database
         conn = sqlite3.connect(db_name)
         cursor = conn.cursor()
-
+        query = f"""
+            SELECT password
+            FROM {table_name}
+            WHERE username = \"{username}\" and password = \"{password}\"
+                       """
+        print(query)
         # Main Select
         cursor.execute(f"""
             SELECT password
             FROM {table_name}
-            WHERE username = {username} and password = {password}
+            WHERE username = \"{username}\" and password = \"{password}\"
                        """)  
         
         # here late use query from Query class
         output_string=cursor.fetchall()
+        if output_string ==[]:
+            output_string = "False"
+        elif output_string != []:
+            output_string = "True"
+            
     except sqlite3.Error as e:
         output_string=f"Error: {e}"
     finally:
         conn.close()
-        return output_string
+        return output_string +"\n"
