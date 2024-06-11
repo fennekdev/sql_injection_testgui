@@ -2,6 +2,7 @@
 version: production
 author: fennekdev
 github: https://github.com/fennekdev/sql_injection_testgui
+tutorial: https://youtu.be/xvFZjo5PgG0?si=bFdqQvvSoPK7LpwR
 """
 import tkinter as tk
 import customtkinter as ctk
