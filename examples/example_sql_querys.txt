@@ -1,5 +1,7 @@
-Coustome Querys need "username" and/or "password" like in the Example 1:
+HERE TUTORIAL -> https://youtu.be/xvFZjo5PgG0?si=bFdqQvvSoPK7LpwR
 
+
+Coustome Querys need "username" and/or "password" like in the Example 1:
 
 Example 1:
 
