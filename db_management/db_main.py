@@ -95,3 +95,39 @@ def exec_query(query_lvl,db_name,table_name,username,password):
         finally:
             conn.close()
             return output_string +"\n"
+
+
+    elif query_lvl == 2:
+        try:
+            # Connect to the database
+            conn = sqlite3.connect(db_name)
+            cursor = conn.cursor()
+            query = """
+                SELECT password
+                FROM users
+                WHERE username = %s AND password = %s
+            \"""\ncursor.execute(query,(username,password))"""
+            
+            real_query = """
+                SELECT password
+                FROM users
+                WHERE username = %s AND password = %s
+                        """
+
+            print(real_query)
+            # Main Select
+            cursor.execute(real_query,(username,password))
+
+
+            # here late use query from Query class
+            output_string=cursor.fetchall()
+            if output_string ==[]:
+                output_string = "False"
+            elif output_string != []:
+                output_string = "True"
+                
+        except sqlite3.Error as e:
+            output_string=f"Error: {e}"
+        finally:
+            conn.close()
+            return output_string +"\n"

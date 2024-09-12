@@ -3,6 +3,11 @@ version: production
 author: fennekdev
 github: https://github.com/fennekdev/sql_injection_testgui
 tutorial: https://youtu.be/xvFZjo5PgG0?si=bFdqQvvSoPK7LpwR
+
+Injections 
+Query lvl 1: password: " Or 1=1--
+Query lvl 2: password: admin" as Text) and password = "false" or 1=1--
+	
 """
 import tkinter as tk
 import customtkinter as ctk
@@ -259,7 +264,16 @@ class App(ctk.CTk,dbm.Query):
 			self.textbox.tag_add("blau",2.0,2.4)
 			self.textbox.tag_add("blau",3.0,3.6)
 
+		elif self.query_lvl == 3:
+			updated_query = f"SELECT password\nFROM users\nWHERE username = %s AND password = %s\"\"\"\ncursor.execute(query,({user},{psw}))"
 		
+			self.textbox.delete("1.0","end")
+			self.textbox.insert(ctk.END,updated_query)
+
+			self.textbox.tag_add("blau",1.0,1.6)
+			self.textbox.tag_add("blau",2.0,2.4)
+			self.textbox.tag_add("blau",3.0,3.6)
+
 		self.exec_query.update()
 		self.textbox.update()
 		self.textbox.configure(state="disabled")
@@ -311,11 +325,11 @@ class App(ctk.CTk,dbm.Query):
 		label = ctk.CTkLabel(master=self.logframe,text='Enter Username and Password',font=("Arial",20))
 		label.grid(row = 0,pady = 30,padx = 10)
 
-		self.user_entry= ctk.CTkEntry(master=self.logframe,placeholder_text="Username",font=("Arial",20),width=200)
+		self.user_entry= ctk.CTkEntry(master=self.logframe,placeholder_text="Username",font=("Arial",20),width=270)
 		self.user_entry.grid(row = 1,pady = 15)
 		self.user_entry.bind("<KeyRelease>", lambda event: self.update_query())
 
-		self.user_pass= ctk.CTkEntry(master=self.logframe,placeholder_text="Password",font=("Arial",20),width=200)
+		self.user_pass= ctk.CTkEntry(master=self.logframe,placeholder_text="Password",font=("Arial",20),width=270)
 		self.user_pass.bind("<KeyRelease>", lambda event: self.update_query())
 		# later for ohter usage
 		self.user_pass.grid(row = 2,pady = 20)
