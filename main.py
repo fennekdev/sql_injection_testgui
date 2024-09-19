@@ -98,6 +98,7 @@ class App(ctk.CTk,dbm.Query):
 			updated_query = "SELECT password\nFROM users\nWHERE username = CAST(\"username\" as TEXT) and password = CAST(\"password\" as TEXT)"
 			self.textbox.delete("1.0","end")
 			self.textbox.insert(ctk.END,updated_query)
+			self.textbox.configure(font=("Arial",17))
 			
 			self.textbox.tag_add("blau",1.0,1.6)
 			self.textbox.tag_add("blau",2.0,2.4)
@@ -106,11 +107,31 @@ class App(ctk.CTk,dbm.Query):
 		
 			self.exec_query.update()
 			self.textbox.update()
+
 			self.textbox.configure(state="disabled")
 		
 		elif self.query_lvl == 2:
 			self.query_lvl =3
 			self.change_query_but.configure(text="Change Query: 3")
+
+			querey_pre = f"SELECT password\nFROM users\nWHERE username = %s AND password = %s\n\napi:	username = \"\"\n	password = \"\"\n	cursor.execute(query,(username,username))"
+			
+			self.textbox.configure(state="normal")
+			self.textbox.delete("1.0","end")
+
+			self.textbox.insert("1.0", querey_pre)
+			self.textbox.configure(font=("Arial",16))
+			
+			self.textbox.tag_add("blau",1.0,1.6)
+			self.textbox.tag_add("blau",2.0,2.4)
+			self.textbox.tag_add("blau",3.0,3.6)
+
+			self.textbox.tag_config("blau",foreground="cyan")
+			self.textbox.tag_config("rot", foreground="indian red")
+			self.textbox.tag_config("outmark",background="light grey",foreground ="black")
+			self.textbox.tag_config("green",foreground="green")
+
+			self.textbox.configure(state="disabled")
 
 		elif self.query_lvl == 3:
 			self.query_lvl =1
@@ -122,6 +143,7 @@ class App(ctk.CTk,dbm.Query):
 			self.textbox.delete("1.0","end")
 
 			self.textbox.insert("1.0", querey_pre)
+			self.textbox.configure(font=("Arial",17))
 
 			self.textbox.tag_add("blau",1.0,1.6)
 			self.textbox.tag_add("blau",2.0,2.4)
@@ -179,7 +201,7 @@ class App(ctk.CTk,dbm.Query):
 			updated_query = f"SELECT password\nFROM users\nWHERE username = \"{user}\" and password = \"{psw}\""
 			self.textbox.delete("1.0","end")
 			self.textbox.insert(ctk.END,updated_query)
-
+			self.textbox.configure(font=("Arial",17))
 			self.textbox.tag_add("blau",1.0,1.6)
 			self.textbox.tag_add("blau",2.0,2.4)
 			self.textbox.tag_add("blau",3.0,3.6)
@@ -262,6 +284,7 @@ class App(ctk.CTk,dbm.Query):
 			updated_query = f"SELECT password\nFROM users\nWHERE username = CAST(\"{user}\" as TEXT) and password = CAST(\"{psw}\" as TEXT)"
 			self.textbox.delete("1.0","end")
 			self.textbox.insert(ctk.END,updated_query)
+			self.textbox.configure(font=("Arial",17))
 
 			self.textbox.tag_add("blau",1.0,1.6)
 			self.textbox.tag_add("blau",2.0,2.4)
@@ -347,58 +370,31 @@ class App(ctk.CTk,dbm.Query):
 
 
 		elif self.query_lvl == 3:
-			updated_query = f"SELECT password\nFROM users\nWHERE username = %s AND password = %s\"\"\"\n\napi: cursor.execute(query,({user},{psw}))"
+			updated_query = f"SELECT password\nFROM users\nWHERE username = %s AND password = %s\n\napi:	username = \"{user}\"\n	password = \"{psw}\"\n	cursor.execute(query,(username,username))"
 			self.textbox.delete("1.0","end")
 			self.textbox.insert(ctk.END,updated_query)
+			self.textbox.configure(font=("Arial",16))
 
 			self.textbox.tag_add("blau",1.0,1.6)
 			self.textbox.tag_add("blau",2.0,2.4)
 			self.textbox.tag_add("blau",3.0,3.6)
 
-			# quot detection
-			if user.find("\"") > -1:
-				self.user_qouted = True
+			# green taging
+			begin_user = self.count_chars_until_index(updated_query,updated_query.find("\""))+1
+			end_user = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_user))
+			self.textbox.tag_add("green",
+						f"1.0 + {begin_user} chars",
+						f"1.0 +{end_user} chars")
+			
+					
+			begin_psw = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_user+len(user)+1))
+			end_psw = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_psw+1))
+			if len(psw):
+				self.textbox.tag_add("green",
+							f"1.0 + {begin_psw+1} chars",
+							f"1.0 +{end_psw} chars")
 
-				n = self.count_chars_until_index(updated_query,updated_query.find("\"")) # maby here begin on begin_user
-				N = self.count_chars_until_index(user,user.find("\""))
-				
-				self.textbox.tag_add("rot",f"1.0 + {n+N+1} chars",f"end -{len(psw)+41} chars") # end should be last char of user
-
-			else:
-				self.user_qouted = False	
-
-			if psw.find("\"") > -1:
-				print("psw quoted")
-				self.psw_qouted = True
-				n = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_psw))
-
-				self.textbox.tag_add("rot",f"1.0 + {n+1} chars","end -11 chars")
-
-			else:
-				self.psw_qouted = False
-
-			# quot detection
-			if user.find("\"") > -1:
-				self.user_qouted = True
-
-				n = self.count_chars_until_index(updated_query,updated_query.find("\"")) # maby here begin on begin_user
-				N = self.count_chars_until_index(user,user.find("\""))
-				
-				self.textbox.tag_add("rot",f"1.0 + {n+N+1} chars",f"end -{len(psw)+41} chars") # end should be last char of user
-
-			else:
-				self.user_qouted = False	
-
-			if psw.find("\"") > -1:
-				print("psw quoted")
-				self.psw_qouted = True
-				n = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_psw))
-
-				self.textbox.tag_add("rot",f"1.0 + {n+1} chars","end -11 chars")
-
-			else:
-				self.psw_qouted = False
-				
+			
 			# outcommend detection
 			skip = 0
 			if updated_query.find("--") != -1:
