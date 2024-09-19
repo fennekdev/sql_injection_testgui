@@ -255,6 +255,9 @@ class App(ctk.CTk,dbm.Query):
 
 				else:
 					pass
+
+
+
 		elif self.query_lvl == 2:
 			updated_query = f"SELECT password\nFROM users\nWHERE username = CAST(\"{user}\" as TEXT) and password = CAST(\"{psw}\" as TEXT)"
 			self.textbox.delete("1.0","end")
@@ -264,15 +267,173 @@ class App(ctk.CTk,dbm.Query):
 			self.textbox.tag_add("blau",2.0,2.4)
 			self.textbox.tag_add("blau",3.0,3.6)
 
+			# green taging
+			begin_user = self.count_chars_until_index(updated_query,updated_query.find("\""))+1
+			end_user = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_user))
+			self.textbox.tag_add("green",
+						f"1.0 + {begin_user} chars",
+						f"1.0 +{end_user} chars")
+			
+					
+			begin_psw = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_user+len(user)+1))
+			end_psw = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_psw+1))
+			if len(psw):
+				self.textbox.tag_add("green",
+							f"1.0 + {begin_psw+1} chars",
+							f"1.0 +{end_psw} chars")
+
+
+			# quot detection
+			if user.find("\"") > -1:
+				self.user_qouted = True
+
+				n = self.count_chars_until_index(updated_query,updated_query.find("\"")) # maby here begin on begin_user
+				N = self.count_chars_until_index(user,user.find("\""))
+				
+				self.textbox.tag_add("rot",f"1.0 + {n+N+1} chars",f"end -{len(psw)+41} chars") # end should be last char of user
+
+			else:
+				self.user_qouted = False	
+
+			if psw.find("\"") > -1:
+				print("psw quoted")
+				self.psw_qouted = True
+				n = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_psw))
+
+				self.textbox.tag_add("rot",f"1.0 + {n+1} chars","end -11 chars")
+
+			else:
+				self.psw_qouted = False
+
+
+			# outcommend detection
+			skip = 0
+			if updated_query.find("--") != -1:
+				if user.find("--") != -1:
+					if self.user_qouted == False:
+						skip = updated_query.find("--")+2
+						print("-- detect but qouted")
+
+					elif self.user_qouted == True:
+						# check index from quot
+						if user.find("--")>user.find("\""):
+							n = self.count_chars_until_index(updated_query,updated_query.find("--"))
+							self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
+							print("-- detectet and queted")
+						else:
+							# skip index
+							skip = updated_query.find("--")+2
+							print("-- quot detected but index< backslash")
+				else:
+					pass
+
+				if psw.find("--") !=-1:
+					if self.psw_qouted == False:
+						pass
+
+					elif self.psw_qouted == True:
+						if skip == 0:
+							if psw.find("--")>psw.find("\""):
+								n = self.count_chars_until_index(updated_query,updated_query.find("--"))
+								self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
+
+						elif skip != 0:
+							if psw.find("--")>psw.find("\""):
+								n = self.count_chars_until_index(updated_query,updated_query.find("--",skip+1))
+								self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
+
+				else:
+					pass
+
+
 		elif self.query_lvl == 3:
-			updated_query = f"SELECT password\nFROM users\nWHERE username = %s AND password = %s\"\"\"\ncursor.execute(query,({user},{psw}))"
-		
+			updated_query = f"SELECT password\nFROM users\nWHERE username = %s AND password = %s\"\"\"\n\napi: cursor.execute(query,({user},{psw}))"
 			self.textbox.delete("1.0","end")
 			self.textbox.insert(ctk.END,updated_query)
 
 			self.textbox.tag_add("blau",1.0,1.6)
 			self.textbox.tag_add("blau",2.0,2.4)
 			self.textbox.tag_add("blau",3.0,3.6)
+
+			# quot detection
+			if user.find("\"") > -1:
+				self.user_qouted = True
+
+				n = self.count_chars_until_index(updated_query,updated_query.find("\"")) # maby here begin on begin_user
+				N = self.count_chars_until_index(user,user.find("\""))
+				
+				self.textbox.tag_add("rot",f"1.0 + {n+N+1} chars",f"end -{len(psw)+41} chars") # end should be last char of user
+
+			else:
+				self.user_qouted = False	
+
+			if psw.find("\"") > -1:
+				print("psw quoted")
+				self.psw_qouted = True
+				n = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_psw))
+
+				self.textbox.tag_add("rot",f"1.0 + {n+1} chars","end -11 chars")
+
+			else:
+				self.psw_qouted = False
+
+			# quot detection
+			if user.find("\"") > -1:
+				self.user_qouted = True
+
+				n = self.count_chars_until_index(updated_query,updated_query.find("\"")) # maby here begin on begin_user
+				N = self.count_chars_until_index(user,user.find("\""))
+				
+				self.textbox.tag_add("rot",f"1.0 + {n+N+1} chars",f"end -{len(psw)+41} chars") # end should be last char of user
+
+			else:
+				self.user_qouted = False	
+
+			if psw.find("\"") > -1:
+				print("psw quoted")
+				self.psw_qouted = True
+				n = self.count_chars_until_index(updated_query,updated_query.find("\"",begin_psw))
+
+				self.textbox.tag_add("rot",f"1.0 + {n+1} chars","end -11 chars")
+
+			else:
+				self.psw_qouted = False
+				
+			# outcommend detection
+			skip = 0
+			if updated_query.find("--") != -1:
+				if user.find("--") !=-1:
+					if self.user_qouted == False:
+						skip = updated_query.find("--")+2
+
+					elif self.user_qouted == True:
+						# check index from quot
+						if user.find("--")>user.find("\""):
+							n = self.count_chars_until_index(updated_query,updated_query.find("--"))
+							self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
+						else:
+							# skip index
+							skip = updated_query.find("--")+2
+				else:
+					pass
+
+				if psw.find("--") !=-1:
+					if self.psw_qouted == False:
+						pass
+
+					elif self.psw_qouted == True:
+						if skip == 0:
+							if psw.find("--")>psw.find("\""):
+								n = self.count_chars_until_index(updated_query,updated_query.find("--"))
+								self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
+
+						elif skip != 0:
+							if psw.find("--")>psw.find("\""):
+								n = self.count_chars_until_index(updated_query,updated_query.find("--",skip+1))
+								self.textbox.tag_add("outmark",f"1.0 + {n} chars","end -1 chars")
+
+				else:
+					pass
 
 		self.exec_query.update()
 		self.textbox.update()
