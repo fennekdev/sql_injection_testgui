@@ -1,6 +1,6 @@
+# for future updates not used right now
+
 class Query:
-
-
     current_query = None
     current_query_lvl=None
     query_dict={1:"query 1",
