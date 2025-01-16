@@ -1,19 +1,19 @@
 """
 version: production
-author: fennekdev
+author: https://github.com/fennekdev
 github: https://github.com/fennekdev/sql_injection_testgui
 tutorial: https://youtu.be/xvFZjo5PgG0?si=bFdqQvvSoPK7LpwR
 
 Injections 
 Query lvl 1: password: " Or 1=1--
-Query lvl 2: password: admin" as Text) and password = "false" or 1=1--
+Query lvl 2: password: " as Text) OR 1=1--
 	
 """
 import tkinter as tk
 import customtkinter as ctk
 from CTkMessagebox import CTkMessagebox
-import sqlite3
-import os
+import sqlite3  #not in use
+import os		# not in use
 import db_management as dbm
 
 class App(ctk.CTk,dbm.Query):
