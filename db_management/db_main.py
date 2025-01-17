@@ -1,3 +1,5 @@
+# care mostly chatgpt my beloved
+
 import sqlite3
 
 def print_db_formated(db_name,table_name):
@@ -34,7 +36,7 @@ def print_db_formated(db_name,table_name):
         return output_string
     
 def exec_query(query_lvl,db_name,table_name,username,password):
-    if query_lvl == 1:
+    if query_lvl == 1: 
         try:
             # Connect to the database
             conn = sqlite3.connect(db_name)
@@ -97,7 +99,7 @@ def exec_query(query_lvl,db_name,table_name,username,password):
             return output_string +"\n"
 
 
-    elif query_lvl == 2:
+    elif query_lvl == 3: # digga das nicht fertig gfs ist nächste woche. ALLEZ
         try:
             # Connect to the database
             conn = sqlite3.connect(db_name)
@@ -105,13 +107,13 @@ def exec_query(query_lvl,db_name,table_name,username,password):
             query = """
                 SELECT password
                 FROM users
-                WHERE username = %s AND password = %s
+                WHERE username = ? AND password = ?
             \"""\ncursor.execute(query,(username,password))"""
             
             real_query = """
                 SELECT password
                 FROM users
-                WHERE username = %s AND password = %s
+                WHERE username = ? AND password = ?
                         """
 
             print(real_query)

@@ -1,4 +1,4 @@
-# for future updates not used right now
+# for future updates not used right now kinda
 
 class Query:
     current_query = None

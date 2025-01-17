@@ -114,7 +114,7 @@ class App(ctk.CTk,dbm.Query):
 			self.query_lvl =3
 			self.change_query_but.configure(text="Change Query: 3")
 
-			querey_pre = f"SELECT password\nFROM users\nWHERE username = %s AND password = %s\n\napi:	username = \"\"\n	password = \"\"\n	cursor.execute(query,(username,username))"
+			querey_pre = f"SELECT password\nFROM users\nWHERE username = ? AND password = ?\n\napi:	username = \"\"\n	password = \"\"\n	cursor.execute(query,(username,username))"
 			
 			self.textbox.configure(state="normal")
 			self.textbox.delete("1.0","end")
@@ -243,6 +243,7 @@ class App(ctk.CTk,dbm.Query):
 				self.psw_qouted = False
 
 			# outcommend detection
+			# this is some real fanzy shit
 			skip = 0
 			if updated_query.find("--") != -1:
 				if user.find("--") !=-1:
@@ -370,7 +371,7 @@ class App(ctk.CTk,dbm.Query):
 
 
 		elif self.query_lvl == 3:
-			updated_query = f"SELECT password\nFROM users\nWHERE username = %s AND password = %s\n\napi:	username = \"{user}\"\n	password = \"{psw}\"\n	cursor.execute(query,(username,username))"
+			updated_query = f"SELECT password\nFROM users\nWHERE username = ? AND password = ?\n\napi:	username = \"{user}\"\n	password = \"{psw}\"\n	cursor.execute(query,(username,username))"
 			self.textbox.delete("1.0","end")
 			self.textbox.insert(ctk.END,updated_query)
 			self.textbox.configure(font=("Arial",16))
@@ -465,7 +466,7 @@ class App(ctk.CTk,dbm.Query):
 		self.exec_query = ctk.CTkLabel(master = self.query_frame,textvariable=self.exec_text,justify="left",font=("Arial",15))
 		self.exec_query.grid(row=2,pady = 10,sticky = "w",padx=5)
 
-	def legende_frame_init(self):  # sql operator legende
+	def legende_frame_init(self):  # add sql operator legende to injection legende
 		self.legende_frame = ctk.CTkFrame(master=self.mainframe)
 		self.legende_frame.grid(row =1,column=3,padx = 10,pady =10,sticky ="NSE",rowspan = 2)
 
@@ -488,7 +489,7 @@ class App(ctk.CTk,dbm.Query):
 
 		self.user_pass= ctk.CTkEntry(master=self.logframe,placeholder_text="Password",font=("Arial",20),width=270)
 		self.user_pass.bind("<KeyRelease>", lambda event: self.update_query())
-		# later for ohter usage
+		# later for other usage
 		self.user_pass.grid(row = 2,pady = 20)
 
 		button = ctk.CTkButton(master=self.logframe,text='Login',command=lambda: self.login(self.user_entry,self.user_pass),font=("Arial",25))
@@ -498,11 +499,10 @@ class App(ctk.CTk,dbm.Query):
 	def login(self,user,passw):
 		
 		username=user.get()
-		#username=str(username) harder lvl
 
 		password=passw.get()
-		#password=str(password) harder lvl
 
+		#dmb package usage for query execution
 		return_value=dbm.exec_query(self.query_lvl,self.db_name,self.current_table,username,password)
 
 		self.output_textbox.insert("1.0",return_value)
@@ -513,6 +513,7 @@ class App(ctk.CTk,dbm.Query):
 		elif return_value =="False\n":
 			CTkMessagebox(message="Login not succesfully",icon="cancel", option_1="shit")
 
+#APP MAINLOOP
 
 if __name__ == "__main__":
 	
