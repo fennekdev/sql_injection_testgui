@@ -15,7 +15,7 @@ def standart_db_init(db_name,standart_data=None): # normal db
         cursor = connection.cursor()
 
         cursor.execute("""
-            CREATE TABLE IF NOT EXISTS users_lvl_1 (
+            CREATE TABLE IF NOT EXISTS users(
                 username TEXT,
                 password TEXT
             );
@@ -40,7 +40,7 @@ def standart_db_init_lvl_2(db_name,standart_data=None): # normal db hashed
         cursor = connection.cursor()
 
         cursor.execute("""
-            CREATE TABLE IF NOT EXISTS users_lvl_2 (
+            CREATE TABLE IF NOT EXISTS users(
                 username TEXT,
                 password TEXT    
             );

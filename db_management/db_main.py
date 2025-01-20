@@ -38,24 +38,39 @@ def print_db_formated(db_name,table_name):
 def exec_query(query_lvl,db_name,table_name,username,password):
     if query_lvl == 1: 
         try:
-            # Connect to the database
-            conn = sqlite3.connect(db_name)
-            cursor = conn.cursor()
-            query = f"""
-                SELECT password
-                FROM {table_name}
-                WHERE username = \"{username}\" and password = \"{password}\"
-                        """
-            print(query)
-            # Main Select
-            cursor.execute(f"""
-                SELECT password
-                FROM {table_name}
-                WHERE username = \"{username}\" and password = \"{password}\"
-                        """)  
+            
+            #check for multistatement injection this is bad it will also detect for 
+            # ; if it is in string therefore executescript will be used that is not working
+            # for selction of data only for multiline shit
+            # i need to intigrate this into the outcomment and quoted detection for it to work
+            # but times are hard presentation is tomorow
+
+            if ";" in username or ";" in password:
+                conn = sqlite3.connect(db_name)
+                cursor = conn.cursor()
+
+                # Main Select
+                cursor.executescript(f"""
+                    SELECT password
+                    FROM {table_name}
+                    WHERE username = \"{username}\" and password = \"{password}\"
+                            """)  
+
+            else:
+                # Connect to the database
+                conn = sqlite3.connect(db_name)
+                cursor = conn.cursor()
+
+                # Main Select
+                cursor.execute(f"""
+                    SELECT password
+                    FROM {table_name}
+                    WHERE username = \"{username}\" and password = \"{password}\"
+                            """)  
             
             # here late use query from Query class
             output_string=cursor.fetchall()
+            print(output_string) #debug
             if output_string ==[]:
                 output_string = "False"
             elif output_string != []:
@@ -70,20 +85,29 @@ def exec_query(query_lvl,db_name,table_name,username,password):
     elif query_lvl == 2:
         try:
             # Connect to the database
-            conn = sqlite3.connect(db_name)
-            cursor = conn.cursor()
-            query = f"""
-                SELECT password
-                FROM {table_name}
-                WHERE username = CAST(\"{username}\" as TEXT) and password = CAST(\"{password}\" as TEXT)
-                        """
-            print(query)
-            # Main Select
-            cursor.execute(f"""
-                SELECT password
-                FROM {table_name}
-                WHERE username = CAST(\"{username}\" as TEXT) and password = CAST(\"{password}\" as TEXT)
-                        """)  
+
+            if ";" in username or ";" in password:  #! read line 42 this shit is some real shit
+
+                conn = sqlite3.connect(db_name)
+                cursor = conn.cursor()
+
+                # Main Select
+                cursor.executescript(f"""
+                    SELECT password
+                    FROM {table_name}
+                    WHERE username = CAST(\"{username}\" as TEXT) and password = CAST(\"{password}\" as TEXT)
+                            """)  
+                
+            else:
+                conn = sqlite3.connect(db_name)
+                cursor = conn.cursor()
+
+                # Main Select
+                cursor.execute(f"""
+                    SELECT password
+                    FROM {table_name}
+                    WHERE username = CAST(\"{username}\" as TEXT) and password = CAST(\"{password}\" as TEXT)
+                            """)  
             
             # here late use query from Query class
             output_string=cursor.fetchall()
@@ -104,12 +128,7 @@ def exec_query(query_lvl,db_name,table_name,username,password):
             # Connect to the database
             conn = sqlite3.connect(db_name)
             cursor = conn.cursor()
-            query = """
-                SELECT password
-                FROM users
-                WHERE username = ? AND password = ?
-            \"""\ncursor.execute(query,(username,password))"""
-            
+
             real_query = """
                 SELECT password
                 FROM users
@@ -133,3 +152,5 @@ def exec_query(query_lvl,db_name,table_name,username,password):
         finally:
             conn.close()
             return output_string +"\n"
+        
+# meine fresse ist dieser Code scheiße XD
