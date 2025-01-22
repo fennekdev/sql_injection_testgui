@@ -473,7 +473,7 @@ class App(ctk.CTk,dbm.Query):
 		query_legend_title=ctk.CTkLabel(master=self.legende_frame,text="query cheat-sheet",font=("Arial",15))
 		query_legend_title.grid(row = 0)
 
-		query_cheat_sheat = ctk.CTkLabel(master=query_legend_title,font=("Arial",15),text="--\nmakes the code ignore the query comming after it\n\n \"\nwhen used you are allowed to inject query code after\n\n")
+		query_cheat_sheat = ctk.CTkLabel(master=query_legend_title,font=("Arial",15),text="--\ncomments out the query comming after it\n\n \"\nescapes the string -> allows user to inject code\n\nOR\nmanipulate the WHERE statement with:\n\n1=1\n a statement that is always true\n\n;\nis used to inject a second SQL query\n\nDROP TABLE users\nis used to delete the table users")
 		query_cheat_sheat.grid(row = 1,padx = 5)
 
 	def login_frame_init(self):

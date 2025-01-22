@@ -1,3 +1,0 @@
-#Python 3
-
-pip install customtkinter,os,sqlite3

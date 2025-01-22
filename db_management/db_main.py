@@ -70,7 +70,6 @@ def exec_query(query_lvl,db_name,table_name,username,password):
             
             # here late use query from Query class
             output_string=cursor.fetchall()
-            print(output_string) #debug
             if output_string ==[]:
                 output_string = "False"
             elif output_string != []:
@@ -134,8 +133,6 @@ def exec_query(query_lvl,db_name,table_name,username,password):
                 FROM users
                 WHERE username = ? AND password = ?
                         """
-
-            print(real_query)
             # Main Select
             cursor.execute(real_query,(username,password))
 

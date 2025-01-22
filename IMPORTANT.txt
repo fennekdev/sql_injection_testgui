@@ -1,0 +1,9 @@
+IF DOING MULITSTATEMENT INJECTION
+---------------------------------
+
+the manipulated db will not recover automaticly after restart:
+
+after manipulation (Drop table etc...)
+
+1) Delete standart_db.db
+2) restart programm -> it will automaticly setup the db if it is missing
