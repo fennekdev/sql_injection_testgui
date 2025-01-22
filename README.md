@@ -13,3 +13,10 @@ A simple "Sqlinjektion" test gui based on local sqlite3 database with simple tab
 ### Detection of input
 
 <img src="https://github.com/fennekdev/sql_injection_testgui/blob/main/screenshots/screenshot_2.PNG" alt="Detection drawing" width="700"/>
+
+### Detection of commenting
+
+<img src="https://github.com/fennekdev/sql_injection_testgui/blob/main/screenshots/screenshot_3.PNG" alt="Detection drawing" width="700"/>
+
+### Multistatement support (even DROP TABLE users)
+<img src="https://github.com/fennekdev/sql_injection_testgui/blob/main/screenshots/screenshot_4.PNG" alt="Detection drawing" width="700"/>
