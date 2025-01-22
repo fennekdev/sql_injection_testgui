@@ -1,4 +1,5 @@
 # for future updates not used right now kinda
+# will be used for coustome querys and db
 
 class Query:
     current_query = None

@@ -187,7 +187,7 @@ class App(ctk.CTk,dbm.Query):
 
 		return count
 	
-	def update_query(self):
+	def update_query(self):  # main function to detect and get position of quots or comments to mark them im frontend  
 		self.textbox.configure(state="normal")
 
 		psw = self.user_pass.get()
@@ -466,7 +466,7 @@ class App(ctk.CTk,dbm.Query):
 		self.exec_query = ctk.CTkLabel(master = self.query_frame,textvariable=self.exec_text,justify="left",font=("Arial",15))
 		self.exec_query.grid(row=2,pady = 10,sticky = "w",padx=5)
 
-	def legende_frame_init(self):  # add sql operator legende to injection legende
+	def legende_frame_init(self):
 		self.legende_frame = ctk.CTkFrame(master=self.mainframe)
 		self.legende_frame.grid(row =1,column=3,padx = 10,pady =10,sticky ="NSE",rowspan = 2)
 
@@ -489,7 +489,6 @@ class App(ctk.CTk,dbm.Query):
 
 		self.user_pass= ctk.CTkEntry(master=self.logframe,placeholder_text="Password",font=("Arial",20),width=270)
 		self.user_pass.bind("<KeyRelease>", lambda event: self.update_query())
-		# later for other usage
 		self.user_pass.grid(row = 2,pady = 20)
 
 		button = ctk.CTkButton(master=self.logframe,text='Login',command=lambda: self.login(self.user_entry,self.user_pass),font=("Arial",25))

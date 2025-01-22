@@ -1,3 +1,6 @@
+
+# for future coustome Querys
+
 Coustome Querys need "username" and/or "password" like in the Example 1:
 
 Example 1:

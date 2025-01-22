@@ -122,7 +122,7 @@ def exec_query(query_lvl,db_name,table_name,username,password):
             return output_string +"\n"
 
 
-    elif query_lvl == 3: # digga das nicht fertig gfs ist nächste woche. ALLEZ
+    elif query_lvl == 3:
         try:
             # Connect to the database
             conn = sqlite3.connect(db_name)

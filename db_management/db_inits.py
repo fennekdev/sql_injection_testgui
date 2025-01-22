@@ -1,7 +1,7 @@
 import os
 import sqlite3
 
-def standart_db_init(db_name,standart_data=None): # normal db 
+def standart_db_init(db_name,standart_data=None): # normal db init
     if standart_data is None:
         standart_data = [("Bob","bob123"),
                          ("Tom","supersecure123"),
@@ -10,7 +10,7 @@ def standart_db_init(db_name,standart_data=None): # normal db
                          ("Karim","qwertzuiop"),
                          ("Moneyboy","moneyyy420"),
                          ("admin","youwillneverguessthispassword")]
-    if not os.path.exists(db_name):
+    if not os.path.exists(db_name): # if db deleted restore
         connection = sqlite3.connect(db_name)
         cursor = connection.cursor()
 
@@ -25,6 +25,12 @@ def standart_db_init(db_name,standart_data=None): # normal db
         cursor.executemany(f"INSERT INTO users (username,password) VALUES (?,?)",(standart_data))
         connection.commit()
         connection.close()
+
+'''
+| will be used for different db encryption lvls for ex. hashed and salt_hashed_peppered |
+right now its juts crap !
+'''
+
 
 def standart_db_init_lvl_2(db_name,standart_data=None): # normal db hashed
     if standart_data is None:
